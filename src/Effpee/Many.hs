@@ -8,10 +8,10 @@ module Effpee.Many
   , fromList
   ) where
 
-import Data.Int
 import Data.Function ((.))
+import Data.Int
 import Effpee
-import Effpee.ADT (Many (..))
+import Effpee.ADT    (Many (..))
 import GHC.Show
 
 -- only needed for REPL interactions
@@ -38,7 +38,6 @@ headOrDefault = todo "Effpee.Many.headOrDefault"
 -- (1 :. (2 :. Empty))
 append
   :: Many a
-  -> Many a
   -> Many a
 append = todo "Effpee.Many.append"
 
@@ -98,7 +97,8 @@ sum' = todo "Effpee.Many.sum -- define in terms of foldR."
 length
   :: Many a
   -> Int
-length = todo "Effpee.Many.length -- define only in terms of foldR."
+length (x:.xs) = 1 + length xs
+length Empty   = 0
 
 -- | Transform each element based on the given function @(a -> b)@.
 -- >>> transform (+1) (1 :. 2 :. 3 :. Empty)
@@ -154,10 +154,10 @@ flatten = todo "Effpee.Many.flatten -- define in terms of flatMap"
 -- (1 :. (2 :. (3 :. Empty)))
 -- >>> reverse Empty
 -- Empty
-reverse
-  :: Many a
-  -> Many a
-reverse = todo "Effpee.Many.reverse -- define in terms of explicit recursion AND foldR"
+reverse many = go Empty many
+  where
+    go acc Empty   = acc
+    go acc (x:.xs) = go (x:.acc) xs
 
 -- | Converts a @Many a@ to a @[a]@.
 --   Should retain order of elements and length property.
@@ -178,7 +178,8 @@ toList (a :. as) = a : toList as
 fromList
   :: [a]
   -> Many a
-fromList = todo "Effpee.Many.fromList"
+fromList (x:xs) = x:.(fromList xs)
+fromList []     = Empty
 
 drop :: Integer -> Many a -> Many a
 drop = todo "Effpee.Many.drop"
