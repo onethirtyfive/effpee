@@ -12,6 +12,7 @@ import Data.Function ((.))
 import Data.Int
 import Effpee
 import Effpee.ADT    (Many (..))
+import GHC.Num       ((+))
 import GHC.Show
 
 -- only needed for REPL interactions
@@ -97,8 +98,8 @@ sum' = todo "Effpee.Many.sum -- define in terms of foldR."
 length
   :: Many a
   -> Int
-length (x:.xs) = 1 + length xs
 length Empty   = 0
+length (_:.xs) = 1 + (length xs)
 
 -- | Transform each element based on the given function @(a -> b)@.
 -- >>> transform (+1) (1 :. 2 :. 3 :. Empty)
